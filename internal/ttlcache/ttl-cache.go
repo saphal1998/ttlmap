@@ -70,7 +70,8 @@ func (c *Cache) run() {
 }
 
 func (c *Cache) detonate(key string, ttl uint64) {
-	time.Sleep(time.Duration(ttl))
+	ch := time.After(time.Duration(ttl))
+	<-ch
 	c.detonateChannel <- key
 }
 
@@ -87,4 +88,14 @@ func NewCache() Cache {
 	go cache.run()
 
 	return cache
+}
+func (c *Cache) Add(key string, value any, ttl uint64) {
+	c.addRequestChannel <- addRequestArgs{key: key, item: value, ttl: ttl}
+}
+func (c *Cache) Get(key string) any {
+	c.getRequestChannel <- key
+	return <-c.getResponseChannel
+}
+func (c *Cache) Delete(key string) {
+	c.deleteRequestChannel <- key
 }
