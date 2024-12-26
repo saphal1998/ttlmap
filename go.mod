@@ -1,3 +1,3 @@
-module ttl-cache
+module github.com/saphal1998/ttlmap
 
-go 1.21.5
+go 1.23.4

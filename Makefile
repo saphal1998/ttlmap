@@ -13,4 +13,4 @@ run:
 
 # Test the application
 test:
-	@go test ./...
+	@go test ./... -v
